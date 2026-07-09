@@ -17,7 +17,7 @@
 
 	let { invoice, amountSats, amountFiat, currency, orderId, receipt = '', rateLockSeconds = 900, lightningAddress = '', onReturnToStore }: Props = $props();
 
-	const isSats = $derived(currency === 'SAT' || currency === 'sats' || currency === 'BTC');
+	const isSats = $derived(['SAT', 'SATS', 'BTC'].includes(currency.toUpperCase()));
 
 	let qrDataUrl = $state('');
 	let copied = $state(false);

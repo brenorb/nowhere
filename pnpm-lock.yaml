@@ -67,6 +67,9 @@ importers:
       vite:
         specifier: ^7.3.1
         version: 7.3.1(@types/node@25.5.2)
+      vitest:
+        specifier: ^3.0.5
+        version: 3.2.4(@types/node@25.5.2)
 
   nowhr:
     dependencies:

@@ -4,6 +4,7 @@
 	import HintIcon from './HintIcon.svelte';
 	import SvgImageInput from './SvgImageInput.svelte';
 	import RelayAdvancedSection from './RelayAdvancedSection.svelte';
+	import { CREATE_CURRENCY_OPTIONS, normalizeCreateCurrency } from '$lib/create-currencies.js';
 
 	interface Props {
 		pubkey: string;
@@ -17,7 +18,7 @@
 
 	let { pubkey, name, description, image, tags, onUpdate, onGenerateKeypair }: Props = $props();
 
-	const currency = $derived(tags.find((t) => t.key === '$')?.value ?? 'USD');
+	const currency = $derived(normalizeCreateCurrency(tags.find((t) => t.key === '$')?.value ?? 'USD'));
 	const weightUnit = $derived(tags.find((t) => t.key === 'w')?.value ?? 'g');
 	const storeDescription = $derived(tags.find((t) => t.key === 'b')?.value ?? '');
 	const showBreakTip = $derived(storeDescription.length > 120 && !storeDescription.includes('\n\n'));
@@ -73,17 +74,9 @@
 	<div class="field">
 		<label for="store-currency">Currency <HintIcon tip="Sets the currency for product prices, shipping, and order totals." /></label>
 		<select id="store-currency" value={currency} onchange={(e) => setCurrency(e.currentTarget.value)}>
-			<option value="USD">USD ($)</option>
-			<option value="EUR">EUR (€)</option>
-			<option value="GBP">GBP (£)</option>
-			<option value="JPY">JPY (¥)</option>
-			<option value="CAD">CAD ($)</option>
-			<option value="AUD">AUD ($)</option>
-			<option value="CHF">CHF</option>
-			<option value="CNY">CNY (¥)</option>
-			<option value="BRL">BRL (R$)</option>
-			<option value="MXN">MXN ($)</option>
-			<option value="sats">BTC (sats)</option>
+			{#each CREATE_CURRENCY_OPTIONS as option}
+				<option value={option.value}>{option.label}</option>
+			{/each}
 		</select>
 	</div>
 

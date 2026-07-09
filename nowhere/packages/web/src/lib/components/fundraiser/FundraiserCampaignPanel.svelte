@@ -4,6 +4,7 @@
 	import HintIcon from '../HintIcon.svelte';
 	import SvgImageInput from '../SvgImageInput.svelte';
 	import { isSvgString } from '$lib/utils/svg';
+	import { CREATE_CURRENCY_OPTIONS, normalizeCreateCurrency } from '$lib/create-currencies.js';
 
 	interface Props {
 		pubkey: string;
@@ -58,7 +59,7 @@
 	}
 
 	const creator = $derived(tags.find((t) => t.key === 'T')?.value ?? '');
-	const currency = $derived(tags.find((t) => t.key === '$')?.value ?? 'USD');
+	const currency = $derived(normalizeCreateCurrency(tags.find((t) => t.key === '$')?.value ?? 'USD'));
 	const goalRaw = $derived(tags.find((t) => t.key === 'g')?.value ?? '');
 	const goalDisplay = $derived(goalRaw ? (parseInt(goalRaw, 10) / 100).toString() : '');
 	const deadline = $derived(tags.find((t) => t.key === 'h')?.value ?? '');
@@ -161,17 +162,9 @@
 	<section class="field-group">
 		<label for="fr-currency">Currency <HintIcon tip="Currency for the fundraising goal amount." /></label>
 		<select id="fr-currency" value={currency} onchange={(e) => setCurrency(e.currentTarget.value)}>
-			<option value="USD">USD ($)</option>
-			<option value="EUR">EUR (&euro;)</option>
-			<option value="GBP">GBP (&pound;)</option>
-			<option value="JPY">JPY (&yen;)</option>
-			<option value="CAD">CAD ($)</option>
-			<option value="AUD">AUD ($)</option>
-			<option value="CHF">CHF</option>
-			<option value="CNY">CNY (&yen;)</option>
-			<option value="BRL">BRL (R$)</option>
-			<option value="MXN">MXN ($)</option>
-			<option value="sats">BTC (sats)</option>
+			{#each CREATE_CURRENCY_OPTIONS as option}
+				<option value={option.value}>{option.label}</option>
+			{/each}
 		</select>
 	</section>
 

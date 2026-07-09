@@ -2,6 +2,7 @@
 	import type { Tag } from '@nowhere/codec';
 	import HintIcon from '../HintIcon.svelte';
 	import ContactDetailsPanel from '../ContactDetailsPanel.svelte';
+	import { CREATE_CURRENCY_OPTIONS, normalizeCreateCurrency } from '$lib/create-currencies.js';
 
 	interface Props {
 		tags: Tag[];
@@ -22,7 +23,7 @@
 
 	const body = $derived(getTagValue('b'));
 	const admissionRaw = $derived(getTagValue('$'));
-	const admissionCurrency = $derived(getTagValue('K'));
+	const admissionCurrency = $derived(normalizeCreateCurrency(getTagValue('K')));
 	const rsvpUrl = $derived(getTagValue('r'));
 	const agenda = $derived(getTagValue('A'));
 	const capacity = $derived(getTagValue('q'));
@@ -112,7 +113,6 @@
 		lineupRaw ? lineupRaw.split('\\p').map(parseLineupDisplay) : []
 	);
 
-	const CURRENCIES = ['USD', 'EUR', 'GBP', 'AUD', 'CAD', 'JPY', 'CHF', 'BTC', 'SATS'];
 </script>
 
 <div class="panel">
@@ -151,8 +151,8 @@
 				class="admission-currency"
 			>
 				<option value="">Currency</option>
-				{#each CURRENCIES as c}
-					<option value={c}>{c}</option>
+				{#each CREATE_CURRENCY_OPTIONS as option}
+					<option value={option.value}>{option.label}</option>
 				{/each}
 			</select>
 		</div>
